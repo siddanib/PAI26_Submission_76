@@ -1,0 +1,25 @@
+defaults:
+  - override /hydra/launcher: joblib
+
+nmoves : 1
+n_range : [0,50]
+n_scale: 51
+batch_size: 186
+df: 4.0
+max_iter: 400000
+n_iter_per_epoch: 1000
+learning_rate : 1.e-4
+max_lr : 5.e-4
+model:
+  half_window : 1 # No of cells on each side
+  history_length : 10
+  n_layers     : 2
+  d_model :  256
+  n_head : 4
+  dropout : 0.
+  act_func:
+    _target_ : "torch.nn.ReLU"
+  residual_con : true
+  train: true
+  file_name: ""
+  epoch_start: 0

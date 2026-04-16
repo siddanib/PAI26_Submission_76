@@ -1,0 +1,116 @@
+# *****************************************************************
+# Run until nsteps == max_step or time == stop_time,
+#     whichever comes first
+# *****************************************************************
+max_step  = 20000
+seed = 1024
+amrex.fpe_trap_invalid = 0
+# *****************************************************************
+# Specific to this application
+# *****************************************************************
+npts_scale = 1.
+alg_type = 1
+# *****************************************************************
+# Are we restarting from an existing checkpoint file?
+# *****************************************************************
+#amr.restart  = chk100000 # restart from this checkpoint file
+# *****************************************************************
+# Problem size and geometry
+# *****************************************************************
+geometry.prob_lo     =  0.0    0.0
+geometry.prob_hi     =  1.0  5120.0
+geometry.is_periodic =  0    0
+### Boundary Type
+bc_lo = 2
+bc_hi = 2
+
+is_ensemble_dir = 0 1
+diffusion_coefficient = 0.5
+flux_mode = "ml"
+ml_model_file = "./scripted_model.pt"
+ml_load_batch_size = 16
+ml_history_len = 0
+ml_history_ngrow = 1
+# ML flow-matching settings (used when flux_mode = ml)
+# ml_flow_steps: number of Euler steps on t in [ml_flow_t0, ml_flow_t1]
+# ml_flow_t0, ml_flow_t1: integration time interval
+# ml_t_df, ml_t_loc, ml_t_scale: Student's t parameters for x0 sampling
+# ml_input_scale: scales phi/flux inputs before they are fed to the model
+# ml_output_mn_fctr, ml_output_std_fctr: rescale model outputs back to flux units
+# quantize_ml_output: stochastically round ML net-particle fluxes to integers
+ml_flow_steps = 20
+ml_flow_t0 = 0.0
+ml_flow_t1 = 1.0
+ml_t_df = 4.0
+ml_t_loc = 0.0
+ml_t_scale = 1.0
+ml_input_scale = 51.0
+ml_output_mn_fctr = 0.069
+ml_output_std_fctr = 0.2537
+quantize_ml_output = false
+
+ext_pot.exists = 1
+ext_pot.alpha = 0.3
+ext_pot.beta = 0.7
+ext_pot.gamma = 5.0e-4
+remove_particle_history = "false"
+remove_hist_freq        = 2
+
+# Piecewise-x initialization example.
+# `init_positions` splits the x-domain into intervals and
+# `init_particles_per_interval` sets the particle count per interval.
+# The second array must have exactly one more entry than the first.
+#init_type = piecewise_x
+#init_positions = 0.15 0.45
+#init_particles_per_interval = 0. 10. 0.
+init_type = external_potential_x
+init_x_range = 0.2 0.4
+init_total_particles = 1000
+
+# Diagnostics example.
+# `diag_flux_x` should map to a valid x-face on the level-0 grid and
+# `diag_x_min`/`diag_x_max` define the x-window used for reduced densities.
+diag_enable = 1
+diag_flux_x = 0.5
+diag_x_min = 0.608239
+diag_x_max = 0.761313
+diag_file = diag_particles.dat
+# *****************************************************************
+# VERBOSITY
+# *****************************************************************
+amr.v              = 1       # verbosity in Amr
+# *****************************************************************
+# Resolution and refinement
+# *****************************************************************
+
+amr.max_grid_size_x = 50
+amr.max_grid_size_y = 2
+amr.n_cell          = 100 5120
+
+amr.max_level       = 0
+amr.use_particles   = 1      # Turn particles on or off
+
+# *****************************************************************
+# Control of grid creation
+# *****************************************************************
+# Blocking factor for grid creation in each dimension --
+#   this ensures that every grid is coarsenable by a factor of 8 --
+#   this is mostly relevant for multigrid performance
+amr.blocking_factor_x = 2
+amr.blocking_factor_y = 2
+# *****************************************************************
+# Time step control
+# *****************************************************************
+adv.cfl            = 0.12   # CFL constraint
+# *****************************************************************
+# Plotfile name and frequency
+# *****************************************************************
+amr.plot_file  = plt    # root name of plot file
+amr.plot_int   = 50     # number of timesteps between plot files
+                        # if negative then no plot files will be written
+# *****************************************************************
+# Checkpoint name and frequency
+# *****************************************************************
+amr.chk_file = chk      # root name of checkpoint file
+amr.chk_int  = 500      # number of timesteps between checkpoint files
+                        # if negative then no checkpoint files will be written
