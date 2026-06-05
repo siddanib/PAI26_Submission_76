@@ -23,8 +23,8 @@ This directory contains the inference-oriented setup for the `FHDeX` Dean-Kawasa
 This code depends on:
 
 - MPI
-- A C++ compiler supported by the AMReX build configuration
-- [AMReX](https://github.com/AMReX-Codes/amrex)
+- A C++ compiler supported by the AMReX build configuration, C++17
+- [AMReX](https://github.com/AMReX-Codes/amrex) (commit: `f2164b6fb74e008b5a84c1527d25f1d4c07cadc1`)
 - [libtorch](https://pytorch.org/get-started/locally/)
 
 The vendored `FHDeX/` subtree also has its own upstream repository reference:
